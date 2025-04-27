@@ -1,0 +1,121 @@
+:root {
+    --green1: #61cf5a;
+    /* --green2: #63ad58; */
+    --green2: #9fef00;
+    --green3: #50864c;
+    --green4: #3e6a3d;
+    --green5: #3b4b33;
+    --error: #FF3131;
+    --primary: #00FF87;
+    --secondary: #1E1E1E;
+    --accent: #00BFFF;
+    --error: #FF3131;
+    --success: #00FF00;
+    --text: #CCCCCC;
+    --button-text: #141d2b;
+}
+
+body {
+    margin: 0;
+    padding: 0;    
+    background-color: black;
+}
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("/images/background-crescer-ctf.png");
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    opacity: .25;
+    z-index: -1;
+}
+
+.login-form {
+    position: relative;
+    margin: 0 auto;
+    margin-top: 200px;
+    width: 600px;
+    text-align: center;
+    z-index: 2;
+    font-family: monospace;
+}
+
+.login-form input {
+    font-family: monospace;
+    color: var(--green1);
+    background-color: var(--green5);
+    padding: 10px;
+    border: none;
+    font-size: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.btn-default {
+    background-color: var(--green2);
+    color: var(--button-text);
+    text-transform: uppercase;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 10px;
+    transition: 300ms;
+}
+
+.btn-default:hover {
+    opacity: .8;
+    cursor: pointer;
+}
+
+.login-form a {
+    font-size: 20px;
+    color: var(--green2);
+}
+
+.login-form a:hover {
+    opacity: .8;
+    cursor: pointer;
+}
+
+.login-form .title {
+    color: var(--green3);
+}
+
+#messageError {
+    color: var(--error);
+    display: block;
+    font-size: 16px;
+    margin-top: 4px;
+    margin-bottom: 10px;
+    transition: 200ms;
+    height: 0;
+}
+
+.home-container {
+    background-color: #1c2b00;
+    color: #9ae800;
+    margin: 0 auto;
+    margin-top: 0px;
+    margin-top: 60px;
+    padding: 20px;
+    width: 800px;
+    border-radius: 20px;
+}
+
+.toolbar {
+    background-color: #1c2b00;
+    color: #9ae800;
+    padding: 24px;
+    height: 30px;
+    font-family: neue-haas-unica,sans-serif;
+    font-size: 26px;
+    display: flex;
+    justify-content: space-between;
+}
+
