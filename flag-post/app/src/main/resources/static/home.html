@@ -16,6 +16,7 @@
 
     <div class="home-container">
         <h2 id="welcome-title"></h2>
+        <h4 id="welcome-create-date"></h4>
     </div>
 
     <script type="text/javascript" src="./js/app.js"></script>
@@ -28,7 +29,9 @@
         if (!user)
             location.href = `${location.protocol}//${location.host}/login.html`
         const welcomeEl = document.getElementById('welcome-title')
+        const welcomeCreateDateEl = document.getElementById('welcome-create-date')
         welcomeEl.innerText = `Olá, ${user.nickname}!`
+        welcomeCreateDateEl.innerText = `Criado em ${user.createAtFormatted}`
     }
 
     window.onload = function () {

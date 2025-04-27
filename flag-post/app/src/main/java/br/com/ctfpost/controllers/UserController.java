@@ -6,7 +6,6 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,9 +15,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.ctfpost.models.CreateUser;
 import br.com.ctfpost.models.User;
-import br.com.ctfpost.models.UserData;
+import br.com.ctfpost.models.UserModel;
+import br.com.ctfpost.repository.ChallengeRepository;
 import br.com.ctfpost.repository.UserRepository;
 import br.com.ctfpost.utils.Constants;
+import br.com.ctfpost.utils.PasswordHasher;
 import ch.qos.logback.core.util.StringUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +32,9 @@ public class UserController extends BaseController {
     @Autowired
     private UserRepository _userRepository;
 
+    @Autowired
+    private ChallengeRepository _challengeRepository;
+
     @PostMapping("token")
     public ResponseEntity<?> login(@RequestBody User user, HttpServletResponse response) {
         if (StringUtil.isNullOrEmpty(user.email) || StringUtil.isNullOrEmpty(user.password))
@@ -40,11 +44,13 @@ public class UserController extends BaseController {
         if (userdb == null)
             return ResponseEntity.status(401).body("Usuário não encontrado.");
 
-        if (!userdb.password.equals(user.password))
+        if (!userdb.password.equals(PasswordHasher.hashSHA512(user.password)))
             return ResponseEntity.status(401).body("Senha incorreta.");
 
         var token = UUID.randomUUID().toString();
         _userRepository.updateToken(userdb.id, token);
+
+        _challengeRepository.createFlags(userdb.id);
 
         response.addCookie(new Cookie(Constants.COOKIE_NAME, token));
 
@@ -78,6 +84,8 @@ public class UserController extends BaseController {
                 return ResponseEntity.badRequest().body("Nickname já cadastrado.");
             }
 
+            user.password = PasswordHasher.hashSHA512(user.password);
+
             _userRepository.add(new User(user));
 
             return ResponseEntity.ok("Criado com sucesso.");
@@ -91,8 +99,8 @@ public class UserController extends BaseController {
     public ResponseEntity<?> get(HttpServletRequest request) {
         var user = getLoggedUser(request, _userRepository);
         if (user == null)
-            return ResponseEntity.status(401).body("Não autorizado");
-        return ResponseEntity.ok(new UserData(user));
+            return ResponseEntity.status(401).body("Não autorizado.");
+        return ResponseEntity.ok(new UserModel(user));
     }
 
     @GetMapping("logout")

@@ -33,7 +33,7 @@ async function login() {
             return
         }
 
-        if (result.status === 400) {
+        if (result.status === 400 || result.status === 401) {
             showError(await result.text())
             return
         }
@@ -60,7 +60,7 @@ async function create() {
             return
         }
 
-        if (result.status === 400) {
+        if (result.status === 400 || result.status === 401) {
             showError(await result.text())
             return
         }
