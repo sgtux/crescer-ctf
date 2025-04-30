@@ -1,5 +1,13 @@
 services:
 
+  app:    
+    build: ./flag-post
+    networks:
+      lan:
+        ipv4_address: 172.35.35.10
+    ports:
+      - "8080:8080"
+
   database:
     environment:
       - POSTGRES_PASSWORD=Postgres123
