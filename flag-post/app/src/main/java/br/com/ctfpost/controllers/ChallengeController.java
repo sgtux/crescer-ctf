@@ -73,4 +73,15 @@ public class ChallengeController extends BaseController {
 
         return ResponseEntity.ok("Pontuado com sucesso.");
     }
+    
+    @GetMapping("ranking")
+    public ResponseEntity<?> ranking(HttpServletRequest request) {
+        var user = getLoggedUser(request, _userRepository);
+        if (user == null)
+            return ResponseEntity.status(401).body("Não autorizado.");
+
+        var ranking = _challengeRepository.getRanking();
+
+        return ResponseEntity.ok(ranking);
+    }
 }

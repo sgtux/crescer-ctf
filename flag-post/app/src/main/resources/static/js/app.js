@@ -92,6 +92,16 @@ async function getUserFlags() {
     }
 }
 
+async function getRanking() {
+    try {
+        const result = await fetch('/challenge/ranking')
+        if (result.status === 200)
+            return await result.json()
+    } catch (ex) {
+        console.log('TRY CATCH', ex)
+    }
+}
+
 async function logout() {
     location.href = `${location.protocol}//${location.host}/user/logout`
 }

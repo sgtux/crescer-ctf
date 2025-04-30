@@ -1,5 +1,6 @@
 package br.com.ctfpost.repository;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import br.com.ctfpost.models.Challenge;
 import br.com.ctfpost.models.UserChallenge;
+import br.com.ctfpost.models.park.RankingModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
@@ -29,6 +31,23 @@ public class ChallengeRepository {
         return entityManager.createQuery(sql, UserChallenge.class)
                 .setParameter("user_id", userId)
                 .getResultList();
+    }
+
+    public List<RankingModel> getRanking() {
+        var sql = "select u.nickname, sum(c.score) score from flagpost.app_user u \n" + //
+                "join flagpost.user_challenge uc on uc.user_id = u.id\n" + //
+                "join flagpost.challenge c on uc.challenge_id = c.id\n" + //
+                "where uc.correct = true\n" + //
+                "group by u.nickname";
+        List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
+        List<RankingModel> ranking = new ArrayList<>();
+        for (Object[] row : results) {
+            String nickname = (String) row[0];
+            Number score = (Number) row[1];
+            ranking.add(new RankingModel(nickname, score.intValue()));
+        }
+
+        return ranking;
     }
 
     @Transactional
