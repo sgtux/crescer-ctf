@@ -34,10 +34,9 @@ public class ChallengeRepository {
     }
 
     public List<RankingModel> getRanking() {
-        var sql = "select u.nickname, sum(c.score) score from flagpost.app_user u \n" + //
-                "join flagpost.user_challenge uc on uc.user_id = u.id\n" + //
-                "join flagpost.challenge c on uc.challenge_id = c.id\n" + //
-                "where uc.correct = true\n" + //
+        var sql = "select u.nickname, sum(COALESCE(c.score,0)) score from flagpost.app_user u \n" + //
+                "left join flagpost.user_challenge uc on uc.user_id = u.id and uc.correct = true\n" + //
+                "left join flagpost.challenge c on uc.challenge_id = c.id\n" + //
                 "group by u.nickname";
         List<Object[]> results = entityManager.createNativeQuery(sql).getResultList();
         List<RankingModel> ranking = new ArrayList<>();
