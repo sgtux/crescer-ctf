@@ -1,0 +1,34 @@
+<html>
+
+<body>
+    <h2>SQL Injection 1</h2>
+    <input id="username" placeholder="username" />
+    <input id="senha" placeholder="senha" />
+    <button onclick="login()">Enviar</button>
+    <br />
+    <br />
+    <div id="result"></div>
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value
+            const senha = document.getElementById('senha').value
+
+            const headers = { 'Content-Type': 'application/json' }
+            const body = JSON.stringify({ username, senha })
+
+            try {
+                const elem = document.getElementById('result')
+                const result = await fetch('/sqlinjection/login', { method: 'POST', body, headers })
+                if([401, 403].includes(result.status)){
+                    elem.innerText = await result.text()
+                }else if(result.status === 200){                    
+                    elem.innerText = 'Sucesso com ' + (await result.json()).username
+                }
+            } catch (ex) {
+                console.log(ex)
+            }
+        }
+    </script>
+</body>
+
+</html>

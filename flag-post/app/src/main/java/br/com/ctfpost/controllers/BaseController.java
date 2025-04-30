@@ -1,5 +1,9 @@
 package br.com.ctfpost.controllers;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
 import br.com.ctfpost.models.User;
 import br.com.ctfpost.repository.UserRepository;
 import br.com.ctfpost.utils.Constants;
@@ -34,5 +38,15 @@ public class BaseController {
             return null;
 
         return userRepository.getByToken(loggedUserToken);
+    }
+
+    protected Connection createParkSqlConnection() {
+        try {
+            return DriverManager.getConnection("jdbc:postgresql://172.35.35.100:5432/postgres",
+                    "park_user",
+                    "park_123");
+        } catch (SQLException ex) {
+            throw new RuntimeException(ex);
+        }
     }
 }

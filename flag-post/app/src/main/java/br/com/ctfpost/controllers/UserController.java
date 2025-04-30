@@ -49,8 +49,8 @@ public class UserController extends BaseController {
         var token = UUID.randomUUID().toString();
         _userRepository.updateToken(userdb.id, token);
 
-        var challenges = _challengeRepository.getUserChallenges(user.id);
-        if (!challenges.isEmpty()) {
+        var challenges = _challengeRepository.getUserChallenges(userdb.id);
+        if (challenges.isEmpty()) {
             _challengeRepository.createFlags(userdb.id);
         }
 

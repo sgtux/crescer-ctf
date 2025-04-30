@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 
 import br.com.ctfpost.models.Challenge;
 import br.com.ctfpost.models.UserChallenge;
-import br.com.ctfpost.models.UserChallengeModel;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;

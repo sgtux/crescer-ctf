@@ -131,16 +131,20 @@ function showError(text) {
 
 function mountFlagsContainer(flags) {
     let html = ''
+    let showAlert = true
     for (const item of flags) {
+        if (!item.correct) {
+            showAlert = false
+        }
         html += '<div><div class="flag-container-title-box">'
         html += `<h2>${item.title}</h2>`
         html += `<span>${item.correct ? item.score : 0}/${item.score}</span>`
         html += '</div >'
         html += `<h4 class="flag-description">${item.description}</h4>`
-        html += `<a class="site-link" href="${item.site}">Abrir Site</a>`
+        html += `<a target='_blank' class="site-link" href="${item.site}">Abrir Site</a>`
         html += '<div class="flag-input-container">'
         if (item.correct) {
-            html += `<input class="flag-input" value="${item.flag}"  />`
+            html += `<input class="flag-input" value="${item.flag}" disabled />`
             html += `<img class="flag-check" src="images/check.png" />`
         } else {
             html += `<input class="flag-input" placeholder="CTF{*******************}" id="flagInput${item.challengeId}" />`
@@ -152,6 +156,9 @@ function mountFlagsContainer(flags) {
 
         const flagContainerElem = document.getElementById('flags-container')
         flagContainerElem.innerHTML = html
-        console.log(flagContainerElem)
+
+    }
+    if (showAlert) {
+        setTimeout(() => alert('Parabéns, você resolveu todos os desafios!'), 1000)
     }
 }

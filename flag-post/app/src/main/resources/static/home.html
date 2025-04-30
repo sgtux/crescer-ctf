@@ -25,7 +25,6 @@
 <script>
     async function loadData() {
         const user = await getUserData()
-        console.log(user)
         if (!user)
             location.href = `${location.protocol}//${location.host}/login.html`
         const welcomeEl = document.getElementById('welcome-title')
