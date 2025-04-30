@@ -16,9 +16,9 @@
 
     <div class="home-container">
         <h2 id="welcome-title"></h2>
-        <h4 id="welcome-create-date"></h4>
+        <h5 id="welcome-create-date"></h5>
+        <div id="flags-container"></div>
     </div>
-
     <script type="text/javascript" src="./js/app.js"></script>
 </body>
 
@@ -32,6 +32,10 @@
         const welcomeCreateDateEl = document.getElementById('welcome-create-date')
         welcomeEl.innerText = `Olá, ${user.nickname}!`
         welcomeCreateDateEl.innerText = `Criado em ${user.createAtFormatted}`
+        const flags = await getUserFlags()
+        if ((flags || {}.length)) {
+            mountFlagsContainer(flags)
+        }
     }
 
     window.onload = function () {

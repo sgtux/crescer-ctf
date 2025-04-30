@@ -1,6 +1,5 @@
 package br.com.ctfpost.controllers;
 
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +34,7 @@ public class UserController extends BaseController {
     @Autowired
     private ChallengeRepository _challengeRepository;
 
-    @PostMapping("token")
+    @PostMapping("login")
     public ResponseEntity<?> login(@RequestBody User user, HttpServletResponse response) {
         if (StringUtil.isNullOrEmpty(user.email) || StringUtil.isNullOrEmpty(user.password))
             return ResponseEntity.badRequest().body("Informe email e senha.");
@@ -50,11 +49,18 @@ public class UserController extends BaseController {
         var token = UUID.randomUUID().toString();
         _userRepository.updateToken(userdb.id, token);
 
-        _challengeRepository.createFlags(userdb.id);
+        var challenges = _challengeRepository.getUserChallenges(user.id);
+        if (!challenges.isEmpty()) {
+            _challengeRepository.createFlags(userdb.id);
+        }
 
-        response.addCookie(new Cookie(Constants.COOKIE_NAME, token));
+        var cookie = new Cookie(Constants.COOKIE_NAME, token);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
 
-        return ResponseEntity.ok(Map.of("token", token));
+        response.addCookie(cookie);
+
+        return ResponseEntity.ok("Login realizado com sucesso.");
     }
 
     @PostMapping("create")
@@ -104,8 +110,22 @@ public class UserController extends BaseController {
     }
 
     @GetMapping("logout")
-    public ResponseEntity<?> logout(HttpServletResponse response) {
-        response.addCookie(new Cookie(Constants.COOKIE_NAME, null));
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+
+        var user = getLoggedUser(request, _userRepository);
+
+        for (var item : request.getCookies()) {
+            if (item.getName().equals(Constants.COOKIE_NAME)) {
+                item.setMaxAge(0);
+                item.setPath("/");
+                item.setHttpOnly(true);
+                response.addCookie(item);
+            }
+        }
+
+        if (user != null)
+            _userRepository.updateToken(user.id, null);
+
         return ResponseEntity.status(HttpStatus.FOUND)
                 .header(HttpHeaders.LOCATION, "/login.html")
                 .build();

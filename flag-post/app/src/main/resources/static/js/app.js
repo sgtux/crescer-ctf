@@ -27,7 +27,7 @@ async function login() {
     const headers = { 'Content-Type': 'application/json' }
     const body = JSON.stringify({ email, password })
     try {
-        const result = await fetch('/user/token', { method: 'post', body, headers })
+        const result = await fetch('/user/login', { method: 'post', body, headers })
         if (result.status === 200) {
             location.href = `${location.protocol}//${location.host}`
             return
@@ -82,8 +82,41 @@ async function getUserData() {
     }
 }
 
+async function getUserFlags() {
+    try {
+        const result = await fetch('/challenge/all')
+        if (result.status === 200)
+            return await result.json()
+    } catch (ex) {
+        console.log('TRY CATCH', ex)
+    }
+}
+
 async function logout() {
     location.href = `${location.protocol}//${location.host}/user/logout`
+}
+
+async function enviarFlag(challengeId) {
+    const flag = document.getElementById(`flagInput${challengeId}`).value
+
+    const headers = { 'Content-Type': 'application/json' }
+    const body = JSON.stringify({ challengeId, flag })
+
+    try {
+        const result = await fetch('/challenge/flag', { method: 'post', body, headers })
+        if (result.status === 200)
+            location.reload()
+        else if (result.status === 400) {
+            const flagErrorElem = document.getElementById(`flagErrorMessage${challengeId}`)
+            flagErrorElem.innerText = await result.text()
+            setTimeout(() => {
+                flagErrorElem.innerText = ''
+            }, 2000)
+        }
+    } catch (ex) {
+        console.log('TRY CATCH', ex)
+    }
+
 }
 
 function showError(text) {
@@ -93,5 +126,32 @@ function showError(text) {
     setTimeout(() => {
         messageErrorElem.innerText = ''
         messageErrorElem.style.height = '0'
-    }, 3000);
+    }, 3000)
+}
+
+function mountFlagsContainer(flags) {
+    let html = ''
+    for (const item of flags) {
+        html += '<div><div class="flag-container-title-box">'
+        html += `<h2>${item.title}</h2>`
+        html += `<span>${item.correct ? item.score : 0}/${item.score}</span>`
+        html += '</div >'
+        html += `<h4 class="flag-description">${item.description}</h4>`
+        html += `<a class="site-link" href="${item.site}">Abrir Site</a>`
+        html += '<div class="flag-input-container">'
+        if (item.correct) {
+            html += `<input class="flag-input" value="${item.flag}"  />`
+            html += `<img class="flag-check" src="images/check.png" />`
+        } else {
+            html += `<input class="flag-input" placeholder="CTF{*******************}" id="flagInput${item.challengeId}" />`
+            html += `<button class="btn-default flag-send-button" onclick="enviarFlag(${item.challengeId})">Enviar</button>`
+            html += `<div class="flag-error-message" id="flagErrorMessage${item.challengeId}"></div>`
+        }
+        html += '</div>'
+        html += '</div>'
+
+        const flagContainerElem = document.getElementById('flags-container')
+        flagContainerElem.innerHTML = html
+        console.log(flagContainerElem)
+    }
 }

@@ -15,7 +15,7 @@ public class UserModel {
         nickname = user.nickname;
         email = user.email;
         createAt = user.create_at;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
         createAtFormatted = sdf.format(user.create_at);
     }
 }

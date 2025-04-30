@@ -17,7 +17,7 @@
 
 body {
     margin: 0;
-    padding: 0;    
+    padding: 0;
     background-color: black;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif;
 }
@@ -114,9 +114,72 @@ body::before {
     color: #9ae800;
     padding: 24px;
     height: 30px;
-    font-family: neue-haas-unica,sans-serif;
+    font-family: neue-haas-unica, sans-serif;
     font-size: 26px;
     display: flex;
     justify-content: space-between;
 }
 
+#flags-container>div {
+    background-color: #0009;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.flag-input {
+    font-family: monospace;
+    color: var(--green1);
+    background-color: var(--green5);
+    padding: 10px;
+    border: none;
+    font-size: 20px;
+    border-radius: 6px;
+    font-weight: bold;
+    height: 40px;
+    width: 320px;
+    padding-top: 15px;
+}
+
+.flag-send-button {
+    margin-left: 10px;
+}
+
+.flag-check {
+    margin-left: 10px;
+}
+
+.site-link {
+    color: var(--green1)
+}
+
+.flag-container-title-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flag-container-title-box>span {
+    font-size: 20px;
+}
+
+.flag-container-title-box>h2 {
+    padding: 0;
+    margin: 10px 0;
+}
+
+.flag-description {
+    font-weight: normal;
+    padding: 0;
+    margin: 10px 0;
+}
+
+.flag-input-container {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.flag-error-message {
+    color: var(--error);
+    margin-left: 10px;
+}

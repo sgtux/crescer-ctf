@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class UserChallengeModel {
 
-    public int challangeId;
+    public int challengeId;
 
     public String title;
 
@@ -20,11 +20,23 @@ public class UserChallengeModel {
 
     public boolean correct;
 
-    public Date create_at;
+    public Date createAt;
 
-    public Date update_at;
+    public Date updateAt;
 
     public int userId;
 
-    public int challenge_id;
+    public UserChallengeModel(UserChallenge userChallenge, Challenge challenge) {
+        challengeId = challenge.id;
+        title = challenge.title;
+        description = challenge.description;
+        score = challenge.score;
+        site = challenge.site;
+        flag = userChallenge.correct ? userChallenge.flag : "";
+        attempts = userChallenge.attempts;
+        correct = userChallenge.correct;
+        createAt = userChallenge.create_at;
+        updateAt = userChallenge.update_at;
+        userId = userChallenge.user_id;
+    }
 }

@@ -6,27 +6,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+@Entity
+@Table(name = "user_challenge", schema = "flagpost")
 public class UserChallenge {
 
-    @Entity
-    @Table(name = "user_challenge", schema = "flagpost")
-    public class Challenge {
+    @Id
+    public int id;
 
-        @Id
-        public int id;
+    public String flag;
 
-        public String flag;
+    public int attempts;
 
-        public int attempts;
+    public boolean correct;
 
-        public boolean correct;
+    public Date create_at;
 
-        public Date create_at;
+    public Date update_at;
 
-        public Date update_at;
+    public int user_id;
 
-        public int user_id;
-
-        public int challenge_id;
-    }
+    public int challenge_id;
 }

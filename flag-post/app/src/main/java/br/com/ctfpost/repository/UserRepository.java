@@ -32,10 +32,10 @@ public class UserRepository {
     }
 
     @Transactional
-    public void updateToken(int id, String token) {
+    public void updateToken(int userId, String token) {
         var sql = "update flagpost.app_user set token = :token where id = :id";
         entityManager.createNativeQuery(sql)
-                .setParameter("id", id)
+                .setParameter("id", userId)
                 .setParameter("token", token)
                 .executeUpdate();
     }

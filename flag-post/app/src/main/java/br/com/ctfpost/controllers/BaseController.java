@@ -8,14 +8,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 public class BaseController {
 
-    private User _loggedUser;
-
-    private String _loggedUserToken;
-
     public String getLoggedUserToken(HttpServletRequest request) {
-
-        if (!StringUtil.isNullOrEmpty(_loggedUserToken))
-            return _loggedUserToken;
 
         var cookies = request.getCookies();
 
@@ -35,17 +28,11 @@ public class BaseController {
 
     public User getLoggedUser(HttpServletRequest request, UserRepository userRepository) {
 
-        if (_loggedUser != null)
-            return _loggedUser;
+        var loggedUserToken = getLoggedUserToken(request);
 
-        if (StringUtil.isNullOrEmpty(_loggedUserToken))
-            _loggedUserToken = getLoggedUserToken(request);
-
-        if (StringUtil.isNullOrEmpty(_loggedUserToken))
+        if (StringUtil.isNullOrEmpty(loggedUserToken))
             return null;
 
-        _loggedUser = userRepository.getByToken(_loggedUserToken);
-        
-        return _loggedUser;
+        return userRepository.getByToken(loggedUserToken);
     }
 }
